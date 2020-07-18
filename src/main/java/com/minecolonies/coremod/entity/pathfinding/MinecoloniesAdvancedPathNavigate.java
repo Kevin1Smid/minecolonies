@@ -15,7 +15,9 @@ import com.minecolonies.api.util.Tuple;
 import com.minecolonies.coremod.entity.citizen.EntityCitizen;
 import com.minecolonies.coremod.util.WorkerUtil;
 import net.minecraft.block.AbstractRailBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -127,7 +129,6 @@ public class MinecoloniesAdvancedPathNavigate extends AbstractAdvancedPathNaviga
 
         this.destination = dest;
         this.originalDestination = dest;
-        this.walkSpeed = speed;
 
         if (speed > MAX_SPEED_ALLOWED)
         {
@@ -313,10 +314,30 @@ public class MinecoloniesAdvancedPathNavigate extends AbstractAdvancedPathNaviga
             speed = walkSpeed * CITIZEN_SWIM_BONUS;
             return speed;
         }
-
-        speed = walkSpeed;
+		else if (WorkerUtil.isPathBlock(world.getBlockState(findBlockUnderEntity(ourEntity)).getBlock()))
+                {
+                    speed = walkSpeed * ON_PATH_SPEED_MULTIPLIER;
+					return speed;
+                }
+		else {
+		speed = walkSpeed;
         return walkSpeed;
+		}
     }
+
+	/**
+     * Determine what block the entity stands on
+	 *
+     * @param parEntity	the entity that stands on the block
+     * @return the Blockstate.
+     */
+	private BlockPos findBlockUnderEntity(Entity parEntity)
+	{
+		int blockX = (int)Math.round(parEntity.posX);
+		int blockY = MathHelper.floor(parEntity.posY-0.2D);
+		int blockZ = (int)Math.round(parEntity.posZ);
+		return new BlockPos(blockX, blockY, blockZ);
+	}
 
     @Override
     public void setSpeed(final double d)
@@ -460,17 +481,6 @@ public class MinecoloniesAdvancedPathNavigate extends AbstractAdvancedPathNaviga
             else if (ourEntity.isInWater())
             {
                 return handleEntityInWater(oldIndex, pEx);
-            }
-            else
-            {
-                if (WorkerUtil.isPathBlock(world.getBlockState(ourEntity.getPosition().down()).getBlock()))
-                {
-                    speed = ON_PATH_SPEED_MULTIPLIER * getSpeed();
-                }
-                else
-                {
-                    speed = getSpeed();
-                }
             }
         }
         return false;
