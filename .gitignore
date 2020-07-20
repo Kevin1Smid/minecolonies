@@ -50,4 +50,5 @@ runServer/
 gradle\.properties
 
 src/main/generated/resources/.cache/cache
-/.vs/slnx.sqlite
+*.sqlite
+/.vs/slnx.sqlite-journal
