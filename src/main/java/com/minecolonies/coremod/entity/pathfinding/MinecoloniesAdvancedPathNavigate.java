@@ -44,7 +44,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class MinecoloniesAdvancedPathNavigate extends AbstractAdvancedPathNavigate
 {
-    private static final double ON_PATH_SPEED_MULTIPLIER = 1.3D;
+    private static final double ON_PATH_SPEED_MULTIPLIER = 2.3D;
     private static final double PIRATE_SWIM_BONUS        = 30;
     private static final double BARBARIAN_SWIM_BONUS     = 15;
     private static final double CITIZEN_SWIM_BONUS       = 10;
@@ -333,9 +333,9 @@ public class MinecoloniesAdvancedPathNavigate extends AbstractAdvancedPathNaviga
      */
 	private BlockPos findBlockUnderEntity(Entity parEntity)
 	{
-		int blockX = (int)Math.round(parEntity.posX);
+		int blockX = MathHelper.floor(parEntity.posX);
 		int blockY = MathHelper.floor(parEntity.posY-0.2D);
-		int blockZ = (int)Math.round(parEntity.posZ);
+		int blockZ = MathHelper.floor(parEntity.posZ);
 		return new BlockPos(blockX, blockY, blockZ);
 	}
 
